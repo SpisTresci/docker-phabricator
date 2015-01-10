@@ -1,0 +1,17 @@
+web:
+  build: .
+  ports:
+    - "80"
+  volumes_from:
+    - data
+  volumes:
+    - /backup:/backup
+  environment:
+    - VIRTUAL_HOST=dev.spistresci.pl
+    - VIRTUAL_PORT=80
+data:
+  image: busybox
+  volumes:
+    - /var/lib/mysql
+    - /var/repo
+    - /opt/phabricator/conf
