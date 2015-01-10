@@ -1,5 +1,5 @@
 web:
-  build: .
+  image: spistresci/docker-phabricator
   ports:
     - "80"
   volumes_from:
