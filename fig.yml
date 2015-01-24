@@ -2,6 +2,7 @@ web:
   image: spistresci/docker-phabricator
   ports:
     - "80"
+    - "443:443"
   volumes_from:
     - data
   volumes:
@@ -15,3 +16,4 @@ data:
     - /var/lib/mysql
     - /var/repo
     - /opt/phabricator/conf
+    - /etc/ssl/spistresci

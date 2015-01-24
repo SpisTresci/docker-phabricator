@@ -35,14 +35,21 @@ ADD ./startup.sh /opt/startup.sh
 RUN chmod +x /opt/startup.sh
 
 ADD phabricator.conf /etc/apache2/sites-available/phabricator.conf
+ADD ports.conf /etc/apache2/ports.conf
 RUN ln -s /etc/apache2/sites-available/phabricator.conf /etc/apache2/sites-enabled/phabricator.conf
 RUN rm -f /etc/apache2/sites-enabled/000-default.conf
 
-RUN cd /opt/ && git clone https://github.com/facebook/libphutil.git
-RUN cd /opt/ && git clone https://github.com/facebook/arcanist.git
-RUN cd /opt/ && git clone https://github.com/facebook/phabricator.git
+RUN ln -s /etc/apache2/mods-available/ssl.load /etc/apache2/mods-enabled/ssl.load
+RUN ln -s /etc/apache2/mods-available/ssl.conf /etc/apache2/mods-enabled/ssl.conf
+RUN ln -s /etc/apache2/mods-available/socache_shmcb.load /etc/apache2/mods-enabled/socache_shmcb.load
+
+RUN cd /opt/ && git clone https://github.com/facebook/libphutil.git --depth 1
+RUN cd /opt/ && git clone https://github.com/facebook/arcanist.git --depth 1
+RUN cd /opt/ && git clone https://github.com/facebook/phabricator.git --depth 1
 
 RUN mkdir -p '/var/repo/'
+RUN mkdir -p '/etc/ssl/spistresci/'
+
 
 RUN ulimit -c 10000
 
@@ -50,5 +57,6 @@ RUN ulimit -c 10000
 RUN apt-get clean
 
 EXPOSE 80
+EXPOSE 443
 
 CMD ["/usr/bin/supervisord"]
